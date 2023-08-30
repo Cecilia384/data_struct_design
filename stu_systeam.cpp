@@ -12,7 +12,7 @@ typedef struct Student{
     int student_score;
     struct Student* next; //指向下一个学生
     struct Student* same_class_student; //指向同班学生的下一个  
-    struct Stu_view_course* stu_course;//学生所选的课程
+    struct Stu_self_course* stu_course;//学生所选的课程
 }Student;
 typedef struct Course{
     char course_name[20];
@@ -25,14 +25,16 @@ typedef struct Course{
     char course_teacher[20];
     char course_time[20];
 }Course;
-typedef struct Stu_view_course{  //学生能看到课程信息
+typedef struct Stu_self_course{  //学生选择的课程信息
+    char student_name[20];
     char course_name[20];
     int course_id;          //课程号
     int course_credit;      //学分
     char course_teacher[20];
-     int teacher_id;
-    struct stu_view_course* next;    //指向下一个课程
-}Stu_view_course;
+    int teacher_id;
+    int score;              //学生课程成绩
+    struct Stu_self_course* next;    //指向下一个课程
+}Stu_self_course;
 
 typedef struct Teacher{
     char teacher_name[20];
@@ -330,7 +332,50 @@ void teacher_change_student_course_score(){
 void teacher_count_student_score(){
     //+,90,80,60,-
 }
-
+Stu_self_course* createNewCourse(char course_name[20],int course_id,int course_credit,char course_teacher[20],int teacher_id){
+    Stu_self_course* new_course=(Stu_self_course*)malloc(sizeof(Stu_self_course));
+    strcpy(new_course->course_name,course_name);
+    new_course->course_id=course_id;
+    new_course->course_credit=course_credit;
+    strcpy(new_course->course_teacher,course_teacher);
+    new_course->teacher_id=teacher_id;
+    new_course->score=0;
+    new_course->next=NULL;
+    return new_course;
+}
+//将学生选择的课程添加至学生信息-课程里
+void addCourseToStudent(Student* student,Stu_self_course* new_course){
+    if(student->stu_course==NULL){
+        student->stu_course=new_course;
+        return;
+    }
+    Stu_self_course* temp=student->stu_course;
+    while(temp->next!=NULL){
+        temp=temp->next;
+    }
+    temp->next=new_course;
+}
+//学生退课时，删除该信息结点
+void deleteCourse(Student* student,int course_id){
+    if(student->stu_course==NULL){
+        return;
+    }
+    Stu_self_course* temp=student->stu_course;
+    if(temp->course_id==course_id){
+        student->stu_course=temp->next;
+        free(temp);
+        return;
+    }
+    while(temp->next!=NULL){
+        if(temp->next->course_id==course_id){
+            Stu_self_course* delete_node=temp->next;
+            temp->next=delete_node->next;
+            free(delete_node);
+            return;
+        }
+        temp=temp->next;
+    }
+}
 Student* createNewStudent(int student_id,char student_name[20],char student_tel[20],int student_score){
     Student* new_student=(Student*)malloc(sizeof(Student));
     new_student->student_id=student_id;
@@ -418,7 +463,9 @@ void student_select_course(){
             find_teacher->course->course_remain--;
             find_teacher->course->course_selected++;
             addStudentToCourse(find_teacher,student_now);
+             
             printf("选课成功!\n");
+            
         }
     }
 }
