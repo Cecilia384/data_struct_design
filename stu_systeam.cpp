@@ -378,7 +378,7 @@ void deleteCourse(Student* student,int course_id){
 }
 void printStudentCourse(Student* student){
     Stu_self_course* temp=student->stu_course;
-    printf("您选择的课程有:\n");
+    printf("\t\t您选择的课程有:\n");
     while(temp!=NULL){
         printf("课程名称:%s\t课程号:%d\t",temp->course_name,temp->course_id);
         printf("老师:%s\t工号:%d\n",temp->course_teacher,temp->teacher_id);
@@ -441,14 +441,15 @@ Student* FindStudent(Student* StudentList,int student_id){
     }
     return NULL;
 }
-// 输出学生选择的课程
-void PrintCoures(Student* StudentList){
-    Student* temp=StudentList;
-    while(temp!=NULL){
-        printf("课程名称:%s\t课程号:%d\t",temp->stu_course->course_name,temp->stu_course->course_id);
-        printf("老师:%s\t工号:%d\n",temp->stu_course->course_teacher,temp->stu_course->teacher_id);
-    }
-}
+// // 输出学生选择的课程
+// void PrintCoures(Student* StudentList){
+//     Student* temp=StudentList;
+//     while(temp!=NULL){
+//         printf("课程名称:%s\t课程号:%d\t",temp->stu_course->course_name,temp->stu_course->course_id);
+//         printf("老师:%s\t工号:%d\n",temp->stu_course->course_teacher,temp->stu_course->teacher_id);
+        
+//     }
+// }
 void student_course_info(){
     system("cls");
     printf("\t\t当前可选课程有:\n");
@@ -486,7 +487,8 @@ void student_query_score(){
 
 }
 void student_output_all_courses(){
-
+    system("cls");  
+    printStudentCourse(student_now);
 }
 
 void admin_fun(){
