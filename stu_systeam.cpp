@@ -376,6 +376,16 @@ void deleteCourse(Student* student,int course_id){
         temp=temp->next;
     }
 }
+void printStudentCourse(Student* student){
+    Stu_self_course* temp=student->stu_course;
+    printf("您选择的课程有:\n");
+    while(temp!=NULL){
+        printf("课程名称:%s\t课程号:%d\t",temp->course_name,temp->course_id);
+        printf("老师:%s\t工号:%d\n",temp->course_teacher,temp->teacher_id);
+        printf("成绩:%d\n",temp->score);
+        temp=temp->next;
+    }
+}
 Student* createNewStudent(int student_id,char student_name[20],char student_tel[20],int student_score){
     Student* new_student=(Student*)malloc(sizeof(Student));
     new_student->student_id=student_id;
