@@ -3,37 +3,37 @@
 #include<stdlib.h>
 #include<string.h>
 const int MAX=110;
-int course_num=0;   //è¯¾ç¨‹æ•°é‡
-bool id_status[MAX]; //å­¦ç”Ÿidæ˜¯å¦æ³¨å†Œ
+int course_num=0;   //¿Î³ÌÊıÁ¿
+bool id_status[MAX]; //Ñ§ÉúidÊÇ·ñ×¢²á
 typedef struct Student{
     int student_id;
     char student_name[20];
     char student_tel[20];
-    int student_score;  //ï¼ï¼ï¼ä¸€ä¸ªå­¦ç”Ÿæœ‰å¤šé—¨è¯¾ç¨‹ï¼Œè¿™ä¸ªå˜é‡æ„Ÿè§‰æ²¡ç”¨
-    struct Student* next; //æŒ‡å‘ä¸‹ä¸€ä¸ªå­¦ç”Ÿ
-    struct Student* same_class_student; //æŒ‡å‘åŒç­å­¦ç”Ÿçš„ä¸‹ä¸€ä¸ª  
-    struct Stu_self_course* stu_course;//å­¦ç”Ÿæ‰€é€‰çš„è¯¾ç¨‹
+    int student_score;  //£¡£¡£¡Ò»¸öÑ§ÉúÓĞ¶àÃÅ¿Î³Ì£¬Õâ¸ö±äÁ¿¸Ğ¾õÃ»ÓÃ
+    struct Student* next; //Ö¸ÏòÏÂÒ»¸öÑ§Éú
+    struct Student* same_class_student; //Ö¸ÏòÍ¬°àÑ§ÉúµÄÏÂÒ»¸ö  
+    struct Stu_self_course* stu_course;//Ñ§ÉúËùÑ¡µÄ¿Î³Ì
 }Student;
 typedef struct Course{
     char course_name[20];
-    int course_id;          //è¯¾ç¨‹å·
-    int course_credit;      //å­¦åˆ†
-    int course_capacity;    //æ€»äººæ•°å®¹é‡
-    int course_selected;    //å½“å‰é€‰è¯¾äººæ•°
-    int course_remain;      //å‰©ä½™å®¹é‡
-    bool status;            //è¯¾ç¨‹çŠ¶æ€--æ˜¯å¦è¢«åˆ é™¤,é»˜è®¤ä¸ºfalse
+    int course_id;          //¿Î³ÌºÅ
+    int course_credit;      //Ñ§·Ö
+    int course_capacity;    //×ÜÈËÊıÈİÁ¿
+    int course_selected;    //µ±Ç°Ñ¡¿ÎÈËÊı
+    int course_remain;      //Ê£ÓàÈİÁ¿
+    bool status;            //¿Î³Ì×´Ì¬--ÊÇ·ñ±»É¾³ı,Ä¬ÈÏÎªfalse
     char course_teacher[20];
     char course_time[20];
 }Course;
-typedef struct Stu_self_course{  //å­¦ç”Ÿé€‰æ‹©çš„è¯¾ç¨‹ä¿¡æ¯
+typedef struct Stu_self_course{  //Ñ§ÉúÑ¡ÔñµÄ¿Î³ÌĞÅÏ¢
     char student_name[20];
     char course_name[20];
-    int course_id;          //è¯¾ç¨‹å·
-    int course_credit;      //å­¦åˆ†
+    int course_id;          //¿Î³ÌºÅ
+    int course_credit;      //Ñ§·Ö
     char course_teacher[20];
     int teacher_id;
-    int score;              //å­¦ç”Ÿè¯¾ç¨‹æˆç»©
-    struct Stu_self_course* next;    //æŒ‡å‘ä¸‹ä¸€ä¸ªè¯¾ç¨‹
+    int score;              //Ñ§Éú¿Î³Ì³É¼¨
+    struct Stu_self_course* next;    //Ö¸ÏòÏÂÒ»¸ö¿Î³Ì
 }Stu_self_course;
 
 typedef struct Teacher{
@@ -47,74 +47,74 @@ typedef struct Teacher{
 
 Teacher* root=NULL;
 Student* studentList=NULL;
-Student* student_now=NULL;      //æ­£åœ¨ä½¿ç”¨ç³»ç»Ÿçš„å­¦ç”Ÿ
-Teacher* teacher_now=NULL;      //æ­£åœ¨ä½¿ç”¨ç³»ç»Ÿçš„è€å¸ˆ
+Student* student_now=NULL;      //ÕıÔÚÊ¹ÓÃÏµÍ³µÄÑ§Éú
+Teacher* teacher_now=NULL;      //ÕıÔÚÊ¹ÓÃÏµÍ³µÄÀÏÊ¦
 void showMenu();
 void menu_fun();
-
-
+void PrintStudentList(Student* StudentList); 
+Student* FindStudent(Student* StudentList,int student_id);
 void showMenu()
 {
     printf("\t\t******************************************\n");
     printf("\t\t**\t                        \t**\n");
-    printf("\t\t**\t å­¦ç”Ÿé€‰è¯¾ç³»ç»Ÿ  \t**\n");
+    printf("\t\t**\t Ñ§ÉúÑ¡¿ÎÏµÍ³  \t**\n");
     printf("\t\t**\t                        \t**\n");
-    printf("\t\t**\t*  è¯·é€‰æ‹©ç”¨æˆ·æƒé™ *\t**\n");
+    printf("\t\t**\t*  ÇëÑ¡ÔñÓÃ»§È¨ÏŞ *\t**\n");
     printf("\t\t**\t                        \t**\n");
-    printf("\t\t**\t*  [1].ç®¡ç†å‘˜  *\t**\n");
+    printf("\t\t**\t*  [1].¹ÜÀíÔ±  *\t**\n");
     printf("\t\t**\t                        \t**\n");
-    printf("\t\t**\t*  [2].è€å¸ˆ  *\t**\n");
+    printf("\t\t**\t*  [2].ÀÏÊ¦  *\t**\n");
     printf("\t\t**\t                        \t**\n");
-    printf("\t\t**\t*  [3].å­¦ç”Ÿ  *\t**\n");
+    printf("\t\t**\t*  [3].Ñ§Éú  *\t**\n");
     printf("\t\t**\t                        \t**\n");
-    printf("\t\t**\t*  [4].é€€å‡º  *\t**\n");
+    printf("\t\t**\t*  [4].ÍË³ö  *\t**\n");
     printf("\t\t**\t                        \t**\n");
     printf("\t\t******************************************\n");
      
-    printf("\n\t\t**\t è¾“å…¥åºå·ä»¥é€‰æ‹©å¯¹åº”åŠŸèƒ½ : "); 
+    printf("\n\t\t**\t ÊäÈëĞòºÅÒÔÑ¡Ôñ¶ÔÓ¦¹¦ÄÜ : "); 
 	}
 void showMenu_teacher()
 {
     printf("\t\t******************************************\n");
     printf("\t\t**\t                        \t**\n");
-    printf("\t\t**\t å­¦ç”Ÿé€‰è¯¾ç³»ç»Ÿ-è€å¸ˆ  \t**\n");
+    printf("\t\t**\t Ñ§ÉúÑ¡¿ÎÏµÍ³-ÀÏÊ¦  \t**\n");
     printf("\t\t**\t                        \t**\n");
-    printf("\t\t**\t*  [1].æŸ¥è¯¢æ‰€å¼€è¯¾ç¨‹ä¿¡æ¯  *\t**\n");
+    printf("\t\t**\t*  [1].²éÑ¯Ëù¿ª¿Î³ÌĞÅÏ¢  *\t**\n");
     printf("\t\t**\t                        \t**\n");
-    printf("\t\t**\t*  [2].æŸ¥è¯¢è¯¾ç¨‹å­¦ç”Ÿä¿¡æ¯  *\t**\n");
+    printf("\t\t**\t*  [2].²éÑ¯¿Î³ÌÑ§ÉúĞÅÏ¢  *\t**\n");
     printf("\t\t**\t                        \t**\n");
-    printf("\t\t**\t*  [3].è¾“å…¥å­¦ç”Ÿè¯¾ç¨‹æˆç»©  *\t**\n");
+    printf("\t\t**\t*  [3].ÊäÈëÑ§Éú¿Î³Ì³É¼¨  *\t**\n");
     printf("\t\t**\t                        \t**\n"); 
-    printf("\t\t**\t*  [4].ä¿®æ”¹å­¦ç”Ÿè¯¾ç¨‹æˆç»©  *\t**\n");
+    printf("\t\t**\t*  [4].ĞŞ¸ÄÑ§Éú¿Î³Ì³É¼¨  *\t**\n");
     printf("\t\t**\t                        \t**\n");
-    printf("\t\t**\t*  [5].ç»Ÿè®¡æˆç»©äººæ•°åˆ†å¸ƒ  *\t**\n");
+    printf("\t\t**\t*  [5].Í³¼Æ³É¼¨ÈËÊı·Ö²¼  *\t**\n");
     printf("\t\t**\t                        \t**\n");
-    printf("\t\t**\t*  [6].é€€å‡º  *\t**\n");
+    printf("\t\t**\t*  [6].ÍË³ö  *\t**\n");
     printf("\t\t**\t                        \t**\n");
     printf("\t\t******************************************\n");
-     printf("\n\t\t**\t è¾“å…¥åºå·ä»¥é€‰æ‹©å¯¹åº”åŠŸèƒ½ : "); 
+     printf("\n\t\t**\t ÊäÈëĞòºÅÒÔÑ¡Ôñ¶ÔÓ¦¹¦ÄÜ : "); 
 }
 void showMenu_Adimn()
 {
     printf("\t\t******************************************\n");
     printf("\t\t**\t                        \t**\n");
-    printf("\t\t**\t å­¦ç”Ÿé€‰è¯¾ç³»ç»Ÿ-ç®¡ç†å‘˜  \t**\n");
+    printf("\t\t**\t Ñ§ÉúÑ¡¿ÎÏµÍ³-¹ÜÀíÔ±  \t**\n");
     printf("\t\t**\t                        \t**\n");
-    printf("\t\t**\t*  [1].åˆ›å»ºè¯¾ç¨‹ä¿¡æ¯  *\t**\n");
+    printf("\t\t**\t*  [1].´´½¨¿Î³ÌĞÅÏ¢  *\t**\n");
     printf("\t\t**\t                        \t**\n");
-    printf("\t\t**\t*  [2].æ·»åŠ è¯¾ç¨‹ä¿¡æ¯  *\t**\n");
+    printf("\t\t**\t*  [2].Ìí¼Ó¿Î³ÌĞÅÏ¢  *\t**\n");
     printf("\t\t**\t                        \t**\n");
-    printf("\t\t**\t*  [3].åˆ é™¤è¯¾ç¨‹ä¿¡æ¯  *\t**\n");
+    printf("\t\t**\t*  [3].É¾³ı¿Î³ÌĞÅÏ¢  *\t**\n");
     printf("\t\t**\t                        \t**\n"); 
-    printf("\t\t**\t*  [4].ç»Ÿè®¡è¯¾ç¨‹æ€»æ•°  *\t**\n");
+    printf("\t\t**\t*  [4].Í³¼Æ¿Î³Ì×ÜÊı  *\t**\n");
     printf("\t\t**\t                        \t**\n");
-    printf("\t\t**\t*  [5].æŸ¥è¯¢æ¯é—¨è¯¾ä¿®è¯¾çš„äººæ•°  *\t**\n");
+    printf("\t\t**\t*  [5].²éÑ¯Ã¿ÃÅ¿ÎĞŞ¿ÎµÄÈËÊı  *\t**\n");
     printf("\t\t**\t                        \t**\n");
-    printf("\t\t**\t*  [6].æµè§ˆè®¡ç®—æœºä¸“ä¸šçš„è¯¾ç¨‹ä¿¡æ¯  *\t**\n");
+    printf("\t\t**\t*  [6].ä¯ÀÀ¼ÆËã»ú×¨ÒµµÄ¿Î³ÌĞÅÏ¢  ** \n");
     printf("\t\t**\t                        \t**\n");
-    printf("\t\t**\t*  [7].é€€å‡º  *\t**\n");
+    printf("\t\t**\t*  [7].ÍË³ö  *\t**\n");
     printf("\t\t******************************************\n");
-    printf("\n\t\t**\t è¾“å…¥åºå·ä»¥é€‰æ‹©å¯¹åº”åŠŸèƒ½ : "); 
+    printf("\n\t\t**\t ÊäÈëĞòºÅÒÔÑ¡Ôñ¶ÔÓ¦¹¦ÄÜ : "); 
 
 }
 void showMenu_student()
@@ -122,26 +122,26 @@ void showMenu_student()
     
     printf("\t\t******************************************\n");
     printf("\t\t**\t                        \t**\n");
-    printf("\t\t**\t å­¦ç”Ÿé€‰è¯¾ç³»ç»Ÿ-å­¦ç”Ÿ  \t**\n");
+    printf("\t\t**\t Ñ§ÉúÑ¡¿ÎÏµÍ³-Ñ§Éú  \t**\n");
     printf("\t\t**\t                        \t**\n");
-    printf("\t\t**\t*  [1].æŸ¥è¯¢è¯¾ç¨‹ä¿¡æ¯  *\t**\n");
+    printf("\t\t**\t*  [1].²éÑ¯¿Î³ÌĞÅÏ¢  *\t**\n");
     printf("\t\t**\t                        \t**\n");
-    printf("\t\t**\t*  [2].æŠ¥åè¯¾ç¨‹å­¦ä¹   *\t**\n");
+    printf("\t\t**\t*  [2].±¨Ãû¿Î³ÌÑ§Ï°  *\t**\n");
     printf("\t\t**\t                        \t**\n");
-    printf("\t\t**\t*  [3].å–æ¶ˆè¯¾ç¨‹å­¦ä¹   *\t**\n");
+    printf("\t\t**\t*  [3].È¡Ïû¿Î³ÌÑ§Ï°  *\t**\n");
     printf("\t\t**\t                        \t**\n"); 
-    printf("\t\t**\t*  [4].æŸ¥è¯¢è¯¾ç¨‹æˆç»©  *\t**\n");
+    printf("\t\t**\t*  [4].²éÑ¯¿Î³Ì³É¼¨  *\t**\n");
     printf("\t\t**\t                        \t**\n");
-    printf("\t\t**\t*  [5].æµè§ˆæ‰€æœ‰è¯¾ç¨‹çš„ä¿¡æ¯  *\t**\n");
+    printf("\t\t**\t*  [5].ä¯ÀÀËùÓĞ¿Î³ÌµÄĞÅÏ¢  *\t**\n");
     printf("\t\t**\t                        \t**\n");
-    printf("\t\t**\t*  [6].é€€å‡º  *\t**\n");
+    printf("\t\t**\t*  [6].ÍË³ö  *\t**\n");
     printf("\t\t**\t                        \t**\n");
     printf("\t\t******************************************\n");
-     printf("\n\t\t**\t è¾“å…¥åºå·ä»¥é€‰æ‹©å¯¹åº”åŠŸèƒ½ : "); 
+     printf("\n\t\t**\t ÊäÈëĞòºÅÒÔÑ¡Ôñ¶ÔÓ¦¹¦ÄÜ : "); 
 }
 
 Course* createNewCourse(char course_name[20],int course_id,int course_credit,int course_capacity,char course_teacher[20],char course_time[20]){
-    Course* new_course=(Course*)malloc(sizeof(Course));
+   Course* new_course = (Course*)calloc(1, sizeof(Course));
     strcpy(new_course->course_name,course_name);
     new_course->course_id=course_id;
     new_course->course_credit=course_credit;
@@ -154,7 +154,7 @@ Course* createNewCourse(char course_name[20],int course_id,int course_credit,int
     return new_course;
 }
 Teacher* createNewTeacher(char teacher_name[20],int teacher_id){
-    Teacher* new_teacher=(Teacher*)malloc(sizeof(Teacher));
+    Teacher* new_teacher = (Teacher*)calloc(1, sizeof(Teacher));
     strcpy(new_teacher->teacher_name,teacher_name);
     new_teacher->teacher_id=teacher_id;
     new_teacher->course=NULL;
@@ -164,7 +164,7 @@ Teacher* createNewTeacher(char teacher_name[20],int teacher_id){
     return new_teacher;
 }
 
-// æ’å…¥è€å¸ˆç»“ç‚¹
+// ²åÈëÀÏÊ¦½áµã
 Teacher* insert_Teacher_Node(Teacher* root,Teacher* new_teacher){
     if(root==NULL){
         root=new_teacher;
@@ -179,7 +179,7 @@ Teacher* insert_Teacher_Node(Teacher* root,Teacher* new_teacher){
     return root;
 }
 
-// æŸ¥æ‰¾è€å¸ˆç»“ç‚¹ï¼Œè‹¥æ‰¾åˆ°åˆ™è¿”å›è¯¥ç»“ç‚¹ï¼Œå¦åˆ™è¿”å›NULL
+// ²éÕÒÀÏÊ¦½áµã£¬ÈôÕÒµ½Ôò·µ»Ø¸Ã½áµã£¬·ñÔò·µ»ØNULL
 Teacher* search_Teacher_Node(Teacher* root,int teacher_id){
   
     if(root==NULL||root->teacher_id==teacher_id){
@@ -193,30 +193,31 @@ Teacher* search_Teacher_Node(Teacher* root,int teacher_id){
     }
 }
 
-//ä¸­åºéå†ä»¥è€å¸ˆå·¥å·ä¸ºå…³é”®å­—çš„äºŒå‰æ ‘
+//ÖĞĞò±éÀúÒÔÀÏÊ¦¹¤ºÅÎª¹Ø¼ü×ÖµÄ¶ş²æÊ÷
 Teacher* inorder_Teacher_Node(Teacher* root){
     if(root!=NULL){
         inorder_Teacher_Node(root->left);
         Course* temp=root->course;
-        printf("è¯¾ç¨‹åç§°:%s\tè¯¾ç¨‹å·:%d\t",temp->course_name,temp->course_id);
-        printf("è€å¸ˆ:%s\tå·¥å·:%d\n",root->teacher_name,root->teacher_id);
+        printf("\t\t¿Î³ÌÃû³Æ:%s\t¿Î³ÌºÅ:%d\t",temp->course_name,temp->course_id);
+        printf("\t\tÀÏÊ¦:%s\t¹¤ºÅ:%d\n",root->teacher_name,root->teacher_id);
         inorder_Teacher_Node(root->right);
     }
     return root;
 }
-//å±•ç¤ºé€‰è¯¾ç•Œé¢(ä¸­åºéå†ä¸€æ¬¡)
+//Õ¹Ê¾Ñ¡¿Î½çÃæ(ÖĞĞò±éÀúÒ»´Î)
 Teacher* show_course_info(Teacher* root){
-    printf("å½“å‰è¯¾ç¨‹æ€»æ•°ä¸º:%d\n",course_num );
+	
+    printf("\t\tµ±Ç°¿Î³Ì×ÜÊıÎª:%d\n",course_num );
      if(root!=NULL){
         inorder_Teacher_Node(root->left);
         Course* temp=root->course;
-        printf("\nè¯¾ç¨‹åç§°:%s\tè¯¾ç¨‹å·:%d\tè¯¾ç¨‹å­¦åˆ†:%d\tè¯¾ç¨‹å®¹é‡:%d\tè¯¾ç¨‹å‰©ä½™å®¹é‡:%d\n",temp->course_name,temp->course_id,temp->course_credit,temp->course_capacity,temp->course_remain);
-        printf("è¯¾ç¨‹ä»»è¯¾è€å¸ˆ:%s\tè€å¸ˆå·¥å·:%d\tè¯¾ç¨‹ä¸Šè¯¾æ—¶é—´:%s\n",temp->course_teacher,root->teacher_id,temp->course_time);
+        printf("\n\t\t¿Î³ÌÃû³Æ:%s\t¿Î³ÌºÅ:%d\t¿Î³ÌÑ§·Ö:%d\t¿Î³ÌÈİÁ¿:%d\t¿Î³ÌÊ£ÓàÈİÁ¿:%d\n",temp->course_name,temp->course_id,temp->course_credit,temp->course_capacity,temp->course_remain);
+        printf("\t\tÈÎ¿ÎÀÏÊ¦:%s\tÀÏÊ¦¹¤ºÅ:%d\t¿Î³ÌÉÏ¿ÎÊ±¼ä:%s\n",temp->course_teacher,root->teacher_id,temp->course_time);
         inorder_Teacher_Node(root->right);
     }
     return root;
 }
-//åˆ é™¤è€å¸ˆç»“ç‚¹
+//É¾³ıÀÏÊ¦½áµã
 Teacher* delete_Teacher_Node(Teacher* root,int teacher_id){
     if(root==NULL){
         return root;
@@ -226,7 +227,7 @@ Teacher* delete_Teacher_Node(Teacher* root,int teacher_id){
     }else if(teacher_id > root->teacher_id){
         root->right=delete_Teacher_Node(root->right,teacher_id);
     }else{
-        // å½“å‰èŠ‚ç‚¹æ²¡æœ‰å­èŠ‚ç‚¹æˆ–åªæœ‰ä¸€ä¸ªå­èŠ‚ç‚¹
+        // µ±Ç°½ÚµãÃ»ÓĞ×Ó½Úµã»òÖ»ÓĞÒ»¸ö×Ó½Úµã
         if(root->left==NULL){
             Teacher* temp=root->right;
             free(root);
@@ -237,11 +238,11 @@ Teacher* delete_Teacher_Node(Teacher* root,int teacher_id){
             return temp;
         }else{
             Teacher* find_node=root->right;
-             // æ‰¾åˆ°å³å­æ ‘çš„æœ€å°èŠ‚ç‚¹ï¼ˆç»§ä»»è€…ï¼‰
+             // ÕÒµ½ÓÒ×ÓÊ÷µÄ×îĞ¡½Úµã£¨¼ÌÈÎÕß£©
             while(find_node->left!=NULL){
                 find_node=find_node->left;
             }
-            // ç”¨ç»§ä»»è€…çš„å€¼æ›¿ä»£è¦åˆ é™¤çš„èŠ‚ç‚¹
+            // ÓÃ¼ÌÈÎÕßµÄÖµÌæ´úÒªÉ¾³ıµÄ½Úµã
             root->teacher_id=find_node->teacher_id;
             strcpy(root->teacher_name,find_node->teacher_name);
             root->right=delete_Teacher_Node(root->right,find_node->teacher_id);
@@ -252,89 +253,103 @@ Teacher* delete_Teacher_Node(Teacher* root,int teacher_id){
     return root;
 }
 void admin_add_course(){
-        printf("è¯·è¾“å…¥éœ€è¦æ·»åŠ çš„è¯¾ç¨‹ä¿¡æ¯\n");
-        printf("\nè¯¾ç¨‹å: ");    char course_name[20];      scanf("%s",course_name);
-        printf("\nè¯¾ç¨‹å·: ");    int course_id;             scanf("%d",&course_id);
-        printf("\nå­¦åˆ†: ");      int course_credit;         scanf("%d",&course_credit);
-        printf("\næ€»å®¹é‡: ");    int course_capacity;       scanf("%d",&course_capacity);
-        printf("\nä»»è¯¾è€å¸ˆ: ");  char course_teacher[20];   scanf("%s",course_teacher);
-        printf("\nè€å¸ˆå·¥å·: ");  int teacher_id;            scanf("%d",&teacher_id);
-        printf("\nä¸Šè¯¾æ—¶é—´:");   char course_time[20];      scanf("%s",course_time);
+		system("cls");
+        printf("\t\tÇëÊäÈëĞèÒªÌí¼ÓµÄ¿Î³ÌĞÅÏ¢\n");
+        printf("\n\t\t¿Î³ÌÃû: ");    char course_name[20];      scanf("%s",course_name);
+        printf("\t\t¿Î³ÌºÅ: ");    int course_id;             scanf("%d",&course_id);
+        printf("\t\tÑ§·Ö: ");      int course_credit;         scanf("%d",&course_credit);
+        printf("\n\t\t×ÜÈİÁ¿: ");    int course_capacity;       scanf("%d",&course_capacity);
+        printf("\tÈÎ¿ÎÀÏÊ¦: ");  char course_teacher[20];   scanf("%s",course_teacher);
+        printf("\t\tÀÏÊ¦¹¤ºÅ: ");  int teacher_id;            scanf("%d",&teacher_id);
+        printf("\n\t\tÉÏ¿ÎÊ±¼ä:");   char course_time[20];      scanf("%s",course_time);
         Teacher* new_teacher=createNewTeacher(course_teacher,teacher_id);
         Course* new_course=createNewCourse(course_name,course_id,course_credit,course_capacity,course_teacher,course_time);
         new_teacher->course=new_course;
         course_num++;
-        root=insert_Teacher_Node(root,new_teacher); //æ’å…¥è€å¸ˆç»“ç‚¹
-        printf("\nè¯¾ç¨‹%s-%dä¿¡æ¯å½•å…¥æˆåŠŸ!\n",course_name,course_id );
+        root=insert_Teacher_Node(root,new_teacher); //²åÈëÀÏÊ¦½áµã
+        printf("\n\t\t¿Î³Ì%s-%dĞÅÏ¢Â¼Èë³É¹¦!\n",course_name,course_id );
 }
 void admin_delete_course(){
 
 }
 void admin_create_course(){
-    printf("è¯·è¾“å…¥è¦åˆ›å»ºçš„è¯¾ç¨‹æ€»æ•°:");
-    int course_num;
-    scanf("%d",&course_num);
-    while(course_num--){
-        printf("è¯·è¾“å…¥è¯¾ç¨‹ä¿¡æ¯\n");
-        printf("\nè¯¾ç¨‹å: ");    char course_name[20];      scanf("%s",course_name);
-        printf("\nè¯¾ç¨‹å·: ");    int course_id;             scanf("%d",&course_id);
-        printf("\nå­¦åˆ†: ");      int course_credit;         scanf("%d",&course_credit);
-        printf("\næ€»å®¹é‡: ");    int course_capacity;       scanf("%d",&course_capacity);
-        printf("\nä»»è¯¾è€å¸ˆ: ");  char course_teacher[20];   scanf("%s",course_teacher);
-        printf("\nè€å¸ˆå·¥å·: ");  int teacher_id;            scanf("%d",&teacher_id);
-        printf("\nä¸Šè¯¾æ—¶é—´:");   char course_time[20];      scanf("%s",course_time);
+	system("cls");
+    printf("\t\tÇëÊäÈëÒª´´½¨µÄ¿Î³Ì×ÜÊı:");
+    int course_num_now;
+    scanf("%d",&course_num_now);
+    while(course_num_now--){
+        printf("\t\tÇëÊäÈë¿Î³ÌĞÅÏ¢\n");
+        printf("\n\t\t¿Î³ÌÃû: ");    char course_name[20];      scanf("%s",course_name);
+        printf("\t\t¿Î³ÌºÅ: ");    int course_id;             scanf("%d",&course_id);
+        printf("\t\tÑ§·Ö: ");      int course_credit;         scanf("%d",&course_credit);
+        printf("\n\t\t×ÜÈİÁ¿: ");    int course_capacity;       scanf("%d",&course_capacity);
+        printf("\t\tÈÎ¿ÎÀÏÊ¦: ");  char course_teacher[20];   scanf("%s",course_teacher);
+        printf("\t\tÀÏÊ¦¹¤ºÅ: ");  int teacher_id;            scanf("%d",&teacher_id);
+        printf("\n\t\tÉÏ¿ÎÊ±¼ä:");   char course_time[20];      scanf("%s",course_time);
         Teacher* new_teacher=createNewTeacher(course_teacher,teacher_id);
         Course* new_course=createNewCourse(course_name,course_id,course_credit,course_capacity,course_teacher,course_time);
         new_teacher->course=new_course;
         course_num++;
-        root=insert_Teacher_Node(root,new_teacher); //æ’å…¥è€å¸ˆç»“ç‚¹
-        printf("\nè¯¾ç¨‹%s-%dä¿¡æ¯å½•å…¥æˆåŠŸ!\n",course_name,course_id );
-        printf("è¿˜éœ€åˆ›å»º%dé—¨è¯¾ç¨‹\n",course_num );
+        //µ÷ÊÔ
+        printf("\n\t\t test--course_num=%d\n",course_num);
+        root=insert_Teacher_Node(root,new_teacher); //²åÈëÀÏÊ¦½áµã
+        printf("\n\t\t¿Î³Ì%s-%dĞÅÏ¢Â¼Èë³É¹¦!\n",course_name,course_id );
+        //µ÷ÊÔ
+        printf("\t\tyou add a course\n");
+        printf("\t\t course_name:%s\tcourse_id:%d\tcourse_credit:%d\tcourse_capacity:%d\tcourse_teacher:%s\tteacher_id:%d\tcourse_time:%s\n",course_name,course_id,course_credit,course_capacity,course_teacher,teacher_id,course_time);
+        if(course_num_now!=0){
+        	system("cls");
+        	printf("\n\t\t»¹Ğè´´½¨%dÃÅ¿Î³Ì\n\n",course_num_now );
+        	
+		}
+        else {
+        	printf("\n\t\t¿Î³ÌÂ¼ÈëÍê³É!");
+		}
     }
     
 }
 void admin_count_course(){
-    printf("å½“å‰è¯¾ç¨‹æ€»æ•°ä¸º:%d\n",course_num );
+    printf("\t\tµ±Ç°¿Î³Ì×ÜÊıÎª:%d\n",course_num );
 }
 void admin_count_student(){
     system("cls");
-    printf("å½“å‰å¼€è®¾çš„è¯¾ç¨‹æœ‰:\n");
+    printf("\t\tµ±Ç°¿ªÉèµÄ¿Î³ÌÓĞ:\n");
     inorder_Teacher_Node(root);
-    printf("è¯·è¾“å…¥è¦æŸ¥è¯¢è¯¾ç¨‹çš„è€å¸ˆå·¥å·\n");
+    printf("\t\tÇëÊäÈëÒª²éÑ¯¿Î³ÌµÄÀÏÊ¦¹¤ºÅ\n");
     int teacher_id;scanf("%d",&teacher_id);
     Teacher *find_teacher=search_Teacher_Node(root,teacher_id);
     if(find_teacher==NULL){
-        printf("æœªæ‰¾åˆ°è¯¥è€å¸ˆ,è¯·é‡æ–°è¾“å…¥\n");
+        printf("\t\tÎ´ÕÒµ½¸ÃÀÏÊ¦,ÇëÖØĞÂÊäÈë\n");
         return;
     }
     else{
-        printf("è¯¥è€å¸ˆå¼€è®¾çš„è¯¾ç¨‹ä¸º:%s\t",find_teacher->course->course_name);
-        printf("å­¦ç”Ÿäººæ•°ä¸º%d:\n",find_teacher->course->course_selected);
+        printf("\t\t¸ÃÀÏÊ¦¿ªÉèµÄ¿Î³ÌÎª:%s\t",find_teacher->course->course_name);
+        printf("\t\tÑ§ÉúÈËÊıÎª%d:\n",find_teacher->course->course_selected);
     }
 }
 void admin_output_all_courses(){
     system("cls");
-    printf("å½“å‰å¼€è®¾çš„è¯¾ç¨‹æœ‰:\n");
+    printf("\t\tµ±Ç°¿ªÉèµÄ¿Î³ÌÓĞ:\n");
     inorder_Teacher_Node(root);
 }
 
 void teacher_course_info(){
     system("cls");
-    printf("æ‚¨å½“å‰å¼€è®¾çš„è¯¾ç¨‹ä¸º:\n");
-    printf("è¯¾ç¨‹åç§°:%s\tè¯¾ç¨‹å·:%d\t",teacher_now->course->course_name,teacher_now->course->course_id);
-    printf("æ€»å®¹é‡ä¸º%d\t",teacher_now->course->course_capacity);
-    printf("å½“å‰é€‰è¯¾äººæ•°:%d\t",teacher_now->course->course_selected);
+    printf("\t\tÄúµ±Ç°¿ªÉèµÄ¿Î³ÌÎª:\n");
+    printf("\t\t¿Î³ÌÃû³Æ:%s\t¿Î³ÌºÅ:%d\t",teacher_now->course->course_name,teacher_now->course->course_id);
+    printf("\t\t×ÜÈİÁ¿Îª%d\t",teacher_now->course->course_capacity);
+    printf("\t\tµ±Ç°Ñ¡¿ÎÈËÊı:%d\t",teacher_now->course->course_selected);
 }
 void teacher_student_in_class(){
     system("cls");
-    printf("æ‚¨æ‰€åœ¨ç­çº§é‡Œçš„å­¦ç”Ÿä¸º:\n");
+    printf("\t\tÄúËùÔÚ°à¼¶ÀïµÄÑ§ÉúÎª:\n");
     PrintStudentList(teacher_now->student_list);
 }
 void teacher_input_student_course_score(){
    system("cls");
   Student* temp=teacher_now->student_list;
   while(temp!=NULL){
-      printf("è¯·è¾“å…¥å­¦ç”Ÿ%sçš„æˆç»©: ",temp->student_name);
+      printf("\t\tÇëÊäÈëÑ§Éú%sµÄ³É¼¨: ",temp->student_name);
       int score;scanf("%d",&score);
       Stu_self_course* temp_course=temp->stu_course;
       while(temp_course!=NULL){
@@ -349,17 +364,17 @@ void teacher_input_student_course_score(){
 }
 void teacher_change_student_course_score(){
     system("cls");
-    printf("æ‚¨æ‰€åœ¨ç­çº§é‡Œçš„å­¦ç”Ÿä¸º:\n");
+    printf("\t\tÄúËùÔÚ°à¼¶ÀïµÄÑ§ÉúÎª:\n");
     PrintStudentList(teacher_now->student_list);
-    printf("è¯·è¾“å…¥è¦ä¿®æ”¹æˆç»©çš„å­¦ç”Ÿå­¦å·:");
+    printf("\t\tÇëÊäÈëÒªĞŞ¸Ä³É¼¨µÄÑ§ÉúÑ§ºÅ:");
     int student_id;scanf("%d",&student_id);
     Student* find_student=FindStudent(teacher_now->student_list,student_id);
     if(find_student==NULL){
-        printf("æœªæ‰¾åˆ°è¯¥å­¦ç”Ÿ,è¯·é‡æ–°è¾“å…¥\n");
+        printf("\t\tÎ´ÕÒµ½¸ÃÑ§Éú,ÇëÖØĞÂÊäÈë\n");
         return;
     }
     else{
-        printf("è¯·è¾“å…¥ä¿®æ”¹åå­¦ç”Ÿ%sçš„æˆç»©: ",find_student->student_name);
+        printf("\t\tÇëÊäÈëĞŞ¸ÄºóÑ§Éú%sµÄ³É¼¨: ",find_student->student_name);
         int score;scanf("%d",&score);
         Stu_self_course* temp_course=find_student->stu_course;
         while(temp_course!=NULL){
@@ -395,11 +410,11 @@ void teacher_count_student_score(){
         }
         temp=temp->same_class_student;
     }
-    printf("æˆç»©åˆ†å¸ƒä¸º:\n");
-    printf("90åˆ†ä»¥ä¸Š:%d\t80-89åˆ†:%d\t60-79åˆ†:%d\t60åˆ†ä»¥ä¸‹:%d\n",count[0],count[1],count[2],count[3]);
+    printf("\t\t³É¼¨·Ö²¼Îª:\n");
+    printf("\t\t90·ÖÒÔÉÏ:%d\t80-89·Ö:%d\t60-79·Ö:%d\t60·ÖÒÔÏÂ:%d\n",count[0],count[1],count[2],count[3]);
 }
 Stu_self_course* createNewCourse(char course_name[20],int course_id,int course_credit,char course_teacher[20],int teacher_id){
-    Stu_self_course* new_course=(Stu_self_course*)malloc(sizeof(Stu_self_course));
+    Stu_self_course* new_course = (Stu_self_course*)calloc(1, sizeof(Stu_self_course));
     strcpy(new_course->course_name,course_name);
     new_course->course_id=course_id;
     new_course->course_credit=course_credit;
@@ -409,7 +424,7 @@ Stu_self_course* createNewCourse(char course_name[20],int course_id,int course_c
     new_course->next=NULL;
     return new_course;
 }
-//å°†å­¦ç”Ÿé€‰æ‹©çš„è¯¾ç¨‹æ·»åŠ è‡³å­¦ç”Ÿä¿¡æ¯-è¯¾ç¨‹é‡Œ
+//½«Ñ§ÉúÑ¡ÔñµÄ¿Î³ÌÌí¼ÓÖÁÑ§ÉúĞÅÏ¢-¿Î³ÌÀï
 void addCourseToStudent(Student* student,Stu_self_course* new_course){
     if(student->stu_course==NULL){
         student->stu_course=new_course;
@@ -421,7 +436,7 @@ void addCourseToStudent(Student* student,Stu_self_course* new_course){
     }
     temp->next=new_course;
 }
-//å­¦ç”Ÿé€€è¯¾æ—¶ï¼Œåˆ é™¤è¯¥ä¿¡æ¯ç»“ç‚¹
+//Ñ§ÉúÍË¿ÎÊ±£¬É¾³ı¸ÃĞÅÏ¢½áµã
 void deleteCourse(Student* student,int course_id){
     if(student->stu_course==NULL){
         return;
@@ -442,19 +457,19 @@ void deleteCourse(Student* student,int course_id){
         temp=temp->next;
     }
 }
-//æ‰“å°å­¦ç”Ÿé€‰æ‹©çš„è¯¾ç¨‹
+//´òÓ¡Ñ§ÉúÑ¡ÔñµÄ¿Î³Ì
 void printStudentCourse(Student* student){
     Stu_self_course* temp=student->stu_course;
-    printf("\t\tæ‚¨é€‰æ‹©çš„è¯¾ç¨‹æœ‰:\n");
+    printf("\t\tÄúÑ¡ÔñµÄ¿Î³ÌÓĞ:\n");
     while(temp!=NULL){
-        printf("è¯¾ç¨‹åç§°:%s\tè¯¾ç¨‹å·:%d\t",temp->course_name,temp->course_id);
-        printf("è€å¸ˆ:%s\tå·¥å·:%d\n",temp->course_teacher,temp->teacher_id);
-        printf("æˆç»©:%d\n",temp->score);
+        printf("\t\t¿Î³ÌÃû³Æ:%s\t¿Î³ÌºÅ:%d\t",temp->course_name,temp->course_id);
+        printf("\t\tÀÏÊ¦:%s\t¹¤ºÅ:%d\n",temp->course_teacher,temp->teacher_id);
+        printf("\t\t³É¼¨:%d\n",temp->score);
         temp=temp->next;
     }
 }
 Student* createNewStudent(int student_id,char student_name[20],char student_tel[20],int student_score){
-    Student* new_student=(Student*)malloc(sizeof(Student));
+    Student* new_student = (Student*)calloc(1, sizeof(Student));
     new_student->student_id=student_id;
     strcpy(new_student->student_name,student_name);
     strcpy(new_student->student_tel,student_tel);
@@ -475,13 +490,13 @@ void appendStudnet(Student** StudentList,Student* new_student){
     }
     temp->next=new_student;
 }
-//å°†å­¦ç”Ÿæ·»åŠ è‡³è€å¸ˆ-è¯¾ç¨‹é‡Œ
+//½«Ñ§ÉúÌí¼ÓÖÁÀÏÊ¦-¿Î³ÌÀï
 void addStudentToCourse(Teacher* teacher,Student* student){
-    //å¦‚æœè¯¾ç¨‹ä¸­æ²¡æœ‰å­¦ç”Ÿï¼Œå°†æ–°å­¦ç”Ÿè®¾ä¸ºå­¦ç”Ÿé“¾è¡¨çš„å¤´èŠ‚ç‚¹
+    //Èç¹û¿Î³ÌÖĞÃ»ÓĞÑ§Éú£¬½«ĞÂÑ§ÉúÉèÎªÑ§ÉúÁ´±íµÄÍ·½Úµã
     if(teacher->student_list==NULL){
         teacher->student_list=student;
         return;
-    }else{  // å¦åˆ™ï¼Œéå†åˆ°å­¦ç”Ÿé“¾è¡¨æœ«å°¾å¹¶æ·»åŠ æ–°å­¦ç”Ÿ
+    }else{  // ·ñÔò£¬±éÀúµ½Ñ§ÉúÁ´±íÄ©Î²²¢Ìí¼ÓĞÂÑ§Éú
         Student* temp=teacher->student_list;
         while(temp->same_class_student!=NULL){
             temp=temp->same_class_student;
@@ -490,14 +505,15 @@ void addStudentToCourse(Teacher* teacher,Student* student){
     }
 }
 
-//è¾“å‡ºå­¦ç”Ÿé“¾è¡¨
+//Êä³öÑ§ÉúÁ´±í
 void PrintStudentList(Student* StudentList){
     Student* temp=StudentList;
     while(temp!=NULL){
-        printf("å­¦ç”Ÿå§“å:%s\tå­¦å·:%d\tç”µè¯:%s\tæˆç»©:%d\n",temp->student_name,temp->student_id,temp->student_tel,temp->student_score);
+        printf("\t\tÑ§ÉúĞÕÃû:%s\tÑ§ºÅ:%d\tµç»°:%s\t³É¼¨:%d\n",temp->student_name,temp->student_id,temp->student_tel,temp->student_score);
+        temp=temp->next;
     }
 }
-//æ ¹æ®å­¦ç”ŸidæŸ¥æ‰¾å­¦ç”Ÿ
+//¸ù¾İÑ§Éúid²éÕÒÑ§Éú
 Student* FindStudent(Student* StudentList,int student_id){
     Student* temp=StudentList;
     while(temp!=NULL){
@@ -508,34 +524,27 @@ Student* FindStudent(Student* StudentList,int student_id){
     }
     return NULL;
 }
-// // è¾“å‡ºå­¦ç”Ÿé€‰æ‹©çš„è¯¾ç¨‹
-// void PrintCoures(Student* StudentList){
-//     Student* temp=StudentList;
-//     while(temp!=NULL){
-//         printf("è¯¾ç¨‹åç§°:%s\tè¯¾ç¨‹å·:%d\t",temp->stu_course->course_name,temp->stu_course->course_id);
-//         printf("è€å¸ˆ:%s\tå·¥å·:%d\n",temp->stu_course->course_teacher,temp->stu_course->teacher_id);
-//     }
-// }
+ 
 void student_course_info(){
     system("cls");
-    printf("\t\tå½“å‰å¯é€‰è¯¾ç¨‹æœ‰:\n");
+    printf("\t\tµ±Ç°¿ÉÑ¡¿Î³ÌÓĞ:\n");
     show_course_info(root);
 }
 void student_select_course(){
     system("cls");
-    printf("\t\tè¯·è¾“å…¥æ‚¨è¦é€‰æ‹©çš„è¯¾ç¨‹å¯¹åº”çš„è€å¸ˆå·¥å·:");
+    printf("\t\tÇëÊäÈëÄúÒªÑ¡ÔñµÄ¿Î³Ì¶ÔÓ¦µÄÀÏÊ¦¹¤ºÅ:");
     int teacher_id;scanf("%d",&teacher_id);
     Teacher* find_teacher=search_Teacher_Node(root,teacher_id);
     if(find_teacher==NULL){
-        printf("æœªæ‰¾åˆ°è¯¥è€å¸ˆ,è¯·é‡æ–°è¾“å…¥\n");
+        printf("\t\tÎ´ÕÒµ½¸ÃÀÏÊ¦,ÇëÖØĞÂÊäÈë\n");
         return;
     }
     else{
-        printf("è¯¥è€å¸ˆå¼€è®¾çš„è¯¾ç¨‹ä¸º:%s\t",find_teacher->course->course_name);
-        printf("æ€»å®¹é‡ä¸º%d\t",find_teacher->course->course_capacity);
-        printf("å‰©ä½™å®¹é‡ä¸º%d\n",find_teacher->course->course_remain);
-        if(find_teacher->course->course_remain>=find_teacher->course->course_capacity){
-            printf("è¯¥è¯¾ç¨‹å·²æ»¡,è¯·é€‰æ‹©å…¶ä»–è¯¾ç¨‹!\n");
+        printf("\t\t¸ÃÀÏÊ¦¿ªÉèµÄ¿Î³ÌÎª:%s\t",find_teacher->course->course_name);
+        printf("\t\t×ÜÈİÁ¿Îª%d\t",find_teacher->course->course_capacity);
+        printf("\t\tÊ£ÓàÈİÁ¿Îª%d\n",find_teacher->course->course_remain);
+        if(find_teacher->course->course_remain<=0){
+            printf("\t\t¸Ã¿Î³ÌÒÑÂú,ÇëÑ¡ÔñÆäËû¿Î³Ì!\n");
         }else{
             find_teacher->course->course_remain--;
             find_teacher->course->course_selected++;
@@ -545,7 +554,7 @@ void student_select_course(){
              new_course->next=NULL;
              strcpy(new_course->student_name,student_now->student_name);
              addCourseToStudent(student_now,new_course);
-            printf("é€‰è¯¾æˆåŠŸ!\n");
+            printf("\t\tÑ¡¿Î³É¹¦!\n");
             
         }
     }
@@ -555,13 +564,13 @@ void student_cancel_course(){
 }
 void student_query_score(){
     Stu_self_course* temp=student_now->stu_course;
-    printf("\t\tæ‚¨é€‰æ‹©çš„è¯¾ç¨‹æœ‰:\n");
+    printf("\t\tÄúÑ¡ÔñµÄ¿Î³ÌÓĞ:\n");
     while(temp!=NULL){
-        printf("è¯¾ç¨‹åç§°:%s:\t",temp->course_name);
+        printf("\t\t¿Î³ÌÃû³Æ:%s:\t",temp->course_name);
         if(temp->score==0){
-            printf("æˆç»©è¿˜æœªç™»è®°ï¼\n");
+            printf("\t\t³É¼¨»¹Î´µÇ¼Ç!\n");
         }else{
-            printf("æˆç»©:%d\n",temp->score);
+            printf("\t\t³É¼¨:%d\n",temp->score);
         }
          
         temp=temp->next;
@@ -602,10 +611,10 @@ void admin_fun(){
             break;
         
         case 7 :
-            printf("æ‚¨å·²é€€å‡ºç®¡ç†å‘˜ç³»ç»Ÿ\n");
-            return ;//é€€å‡ºç³»ç»Ÿ
+            printf("\t\tÄúÒÑÍË³ö¹ÜÀíÔ±ÏµÍ³\n");
+            return ;//ÍË³öÏµÍ³
         default:
-            printf("è¾“å…¥å€¼æ— æ•ˆ,è¯·é‡æ–°è¾“å…¥\n~");
+            printf("\t\tÊäÈëÖµÎŞĞ§,ÇëÖØĞÂÊäÈë\n~");
             continue;
         }
         
@@ -616,12 +625,16 @@ void admin_fun(){
 void teacher_fun(){
     system("cls");
     if(course_num==0){
-        printf("å½“å‰è¯¾ç¨‹æ€»æ•°ä¸º0,ç³»ç»Ÿè¿˜æœªç™»è®°ï¼Œæ— æ³•è¿›è¡Œæ“ä½œ\nè¯·ç®¡ç†å‘˜å…ˆåˆ›å»ºè¯¾ç¨‹!\n");
+        printf("\n\n\n\t\tµ±Ç°¿Î³Ì×ÜÊıÎª0,ÏµÍ³»¹Î´µÇ¼Ç£¬ÎŞ·¨½øĞĞ²Ù×÷\n\t\tÇë¹ÜÀíÔ±ÏÈ´´½¨¿Î³Ì!\n");
         return;
     }else{
-        printf("\t\tè¯·è¾“å…¥æ‚¨çš„å·¥å·:");
+        printf("\t\tÇëÊäÈëÄúµÄ¹¤ºÅ:");
         int teacher_id;scanf("%d",&teacher_id);
         teacher_now=search_Teacher_Node(root,teacher_id);
+        if(teacher_now==NULL){
+            printf("\t\t¹ÜÀíÔ±»¹Î´Ìí¼ÓÄúµÄ¿Î³Ì!ÇëÁªÏµ¹ÜÀíÔ±\n");
+            return;
+        }
         while(1){
             system("cls");
             system("COLOR fd");
@@ -646,10 +659,10 @@ void teacher_fun(){
                 teacher_count_student_score();
                 break;
             case 6:
-                printf("æ‚¨å·²é€€å‡ºè€å¸ˆç³»ç»Ÿ\n");
-                return ;//é€€å‡ºç³»ç»Ÿ
+                printf("\t\tÄúÒÑÍË³öÀÏÊ¦ÏµÍ³\n");
+                return ;//ÍË³öÏµÍ³
             default:
-                printf("è¾“å…¥å€¼æ— æ•ˆ,è¯·é‡æ–°è¾“å…¥\n~");
+                printf("\t\tÊäÈëÖµÎŞĞ§,ÇëÖØĞÂÊäÈë\n~");
                 continue;
             }
         }
@@ -661,20 +674,20 @@ void teacher_fun(){
 void student_fun(){
     system("cls");
     if(course_num==0){
-        printf("å½“å‰è¯¾ç¨‹æ€»æ•°ä¸º0,ç³»ç»Ÿè¿˜æœªç™»è®°ï¼Œæ— æ³•è¿›è¡Œæ“ä½œ\nè¯·ç®¡ç†å‘˜å…ˆåˆ›å»ºè¯¾ç¨‹!\n");
+        printf("\n\n\n\t\tµ±Ç°¿Î³Ì×ÜÊıÎª0,ÏµÍ³»¹Î´µÇ¼Ç£¬ÎŞ·¨½øĞĞ²Ù×÷\n\t\tÇë¹ÜÀíÔ±ÏÈ´´½¨¿Î³Ì!\n");
         return;
     }else{
-        printf("\t\tè¯·è¾“å…¥æ‚¨çš„å­¦å·:");
+        printf("\t\tÇëÊäÈëÄúµÄÑ§ºÅ:");
         int student_id;scanf("%d",&student_id) ;
     
         if(id_status[student_id]==false){
-            printf("æ‚¨è¿˜æœªæ³¨å†Œ,è¯·å®Œå–„ä¿¡æ¯ä¹‹åé‡æ–°ç™»å…¥\n");
-            printf("è¯·è¾“å…¥æ‚¨çš„å§“å:");
+            printf("\t\tÄú»¹Î´×¢²á,ÇëÍêÉÆĞÅÏ¢Ö®ºóÖØĞÂµÇÈë\n");
+            printf("\t\tÇëÊäÈëÄúµÄĞÕÃû:");
             char student_name[20];scanf("%s",student_name);
-            printf("è¯·è¾“å…¥æ‚¨çš„ç”µè¯:");char student_tel[20];scanf("%s",&student_tel); 
+            printf("\t\tÇëÊäÈëÄúµÄµç»°:");char student_tel[20];scanf("%s",student_tel); 
             appendStudnet(&studentList,createNewStudent(student_id,student_name,student_tel,0));
             id_status[student_id]=true;  
-            printf("æ³¨å†ŒæˆåŠŸ!\n");
+            printf("\t\t×¢²á³É¹¦!\n");
             return;
         }else{
             student_now=FindStudent(studentList,student_id);
@@ -703,10 +716,10 @@ void student_fun(){
                 student_output_all_courses();
                 break;
             case 6:
-                printf("æ‚¨å·²é€€å‡ºå­¦ç”Ÿç³»ç»Ÿ\n");
-                return ;//é€€å‡ºç³»ç»Ÿ
+                printf("\t\tÄúÒÑÍË³öÑ§ÉúÏµÍ³\n");
+                return ;//ÍË³öÏµÍ³
             default:
-                printf("è¾“å…¥å€¼æ— æ•ˆ,è¯·é‡æ–°è¾“å…¥\n~");
+                printf("\t\tÊäÈëÖµÎŞĞ§,ÇëÖØĞÂÊäÈë\n~");
                 continue;
             }
         }
@@ -733,16 +746,16 @@ void menu_fun(){
             student_fun();
             break;
         case 4 :
-            printf("æ‚¨å·²é€€å‡ºå­¦ç”Ÿç®¡ç†ç³»ç»Ÿ\n");
+            printf("\t\tÄúÒÑÍË³öÑ§Éú¹ÜÀíÏµÍ³\n");
             system("pause");
             return ;
         default:
-            printf("è¾“å…¥å€¼æ— æ•ˆ,è¯·é‡æ–°è¾“å…¥\n~");
+            printf("\t\tÊäÈëÖµÎŞĞ§,ÇëÖØĞÂÊäÈë\n~");
             continue;
         }
         system("pause");
-        // ä¼šæš‚åœç¨‹åºçš„æ‰§è¡Œï¼Œç­‰å¾…ç”¨æˆ·æŒ‰ä¸‹ä»»æ„é”®åç»§ç»­æ‰§è¡Œ
-        system("cls");	//æ¸…ç©ºæ§åˆ¶å°çª—å£ä¸­çš„æ‰€æœ‰å†…å®¹ã€‚ 
+        // »áÔİÍ£³ÌĞòµÄÖ´ĞĞ£¬µÈ´ıÓÃ»§°´ÏÂÈÎÒâ¼üºó¼ÌĞøÖ´ĞĞ
+        system("cls");	//Çå¿Õ¿ØÖÆÌ¨´°¿ÚÖĞµÄËùÓĞÄÚÈİ¡£ 
     }
     system("pause");
 }
