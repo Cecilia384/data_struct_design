@@ -9,7 +9,8 @@
 
 const int MAX=110;
 int course_num=0;   //课程数量
-
+char id[MAX_ACCOUNT_LEN];
+char key[MAX_PASSWORD_LEN];
 bool id_status[MAX]; //学生id是否注册
 const int admin_key=112234;
 typedef struct Student{
@@ -68,51 +69,10 @@ void PrintStudentList(Student* StudentList);
 Student* FindStudent(Student* StudentList,int student_id);
 void addCourseToStudent(Student* student,Stu_self_course* new_course);
 void deleteCourse(Student* student,int course_id);
-void log_in(){
-	printf("\t\t    \t 课程管理信息系统  \t    \n");
-	printf("\t\t------------------------------\n");
-	printf("\t\t账号: ");
-	char id[MAX_ACCOUNT_LEN];scanf("%s",id);
-	printf("\n\t\t密码: ");	
-	char key[MAX_PASSWORD_LEN];scanf("%s",key);
-	FILE *file=fopen("acountd.txt","r");
-	if(file==NULL){
-		printf("无法打开文件!");
-		return;
-	}
-	char buffer[512];
-	fgets(buffer, sizeof(buffer), file); // 忽略标题行
-	while(fgets(buffer, sizeof(buffer), file)){
-		 Account account;
-		 sscanf(buffer, "%s %s %s %s %s %[^\n]", account.name, account.account, account.password, account.work_id, account.role);
-		 if(strcmp(account.account,id)==0&&strcmp(account.password,key)==0){
-		 	if(strcmp(account.role,"管理员")==0){
-		 		printf("\t\t登录成功!\n");
-		 		printf("\t\t");system("pause");
-		 		admin_fun();
-		 		return;
-			 }
-			 else if(strcmp(account.role,"老师")==0){
-			 	printf("\t\t登录成功!\n");
-			 	printf("\t\t");system("pause");
-			 	teacher_fun();
-			 	return;
-			 }
-			 else if(strcmp(account.role,"学生")==0){
-			 	printf("\t\t登录成功!\n");
-			 	printf("\t\t");system("pause");
-			 	student_fun();
-			 	return;
-			 }
-		 }
-	}
-	fclose(file);
-	printf("账号或密码不正确！请重试。\n");
-
-}
- 
+void log_in_fun();
 void showMenu()
 {
+	
 	printf("\t\t******************************************\n");
 	printf("\t\t**\t                        \t**\n");
 	printf("\t\t**\t 课程管理信息系统  \t**\n");
@@ -133,9 +93,8 @@ void showMenu()
 }
 void showMenu_teacher()
 {
+	printf("\t\t    \t 课程管理信息系统-老师  \t    \n");
 	printf("\t\t******************************************\n");
-	printf("\t\t**\t                        \t**\n");
-	printf("\t\t**\t 学生选课系统-老师  \t**\n");
 	printf("\t\t**\t                        \t**\n");
 	printf("\t\t**\t*  [1].查询所开课程信息  *\t**\n");
 	printf("\t\t**\t                        \t**\n");
@@ -154,9 +113,8 @@ void showMenu_teacher()
 }
 void showMenu_Adimn()
 {
+	printf("\t\t    \t 课程管理信息系统-管理员  \t    \n");
 	printf("\t\t******************************************\n");
-	printf("\t\t**\t                        \t**\n");
-	printf("\t\t**\t 学生选课系统-管理员  \t**\n");
 	printf("\t\t**\t                        \t**\n");
 	printf("\t\t**\t*  [1].创建课程信息  *\t**\n");
 	printf("\t\t**\t                        \t**\n");
@@ -177,10 +135,8 @@ void showMenu_Adimn()
 }
 void showMenu_student()
 {
-	
+	printf("\t\t    \t 课程管理信息系统-学生  \t    \n");
 	printf("\t\t******************************************\n");
-	printf("\t\t**\t                        \t**\n");
-	printf("\t\t**\t 学生选课系统-学生  \t**\n");
 	printf("\t\t**\t                        \t**\n");
 	printf("\t\t**\t*  [1].查询课程信息  *\t**\n");
 	printf("\t\t**\t                        \t**\n");
@@ -431,7 +387,7 @@ void admin_count_student(){
 }
 void admin_output_all_courses(){
 //	system("cls");
-    if(course_num==0){
+	if(course_num==0){
 		printf("\t\t当前还未开设任何课程!\n");
 		printf("\t\t");system("pause");
 		return;
@@ -742,24 +698,24 @@ void student_query_score(){
 void student_output_all_courses(){
 //	system("cls");  
 	printStudentCourse(student_now);
-	 
+	
 }
 
 void admin_fun(){
 	
-	printf("\t\t请输入管理员账户密码\n\t\t");
-	int in_key;scanf("%d",&in_key);
-	// 清空输入缓冲区
-	while ((getchar()) != '\n');
-	if(in_key==admin_key){
-		
-		printf("\t\t登陆成功!\n");
-		printf("\t\t");system("pause");
-		
-	}else{
-		printf("\t\t密码错误,请重新输入!\n");
-		return;
-	}
+//	printf("\t\t请输入管理员账户密码\n\t\t");
+//	int in_key;scanf("%d",&in_key);
+//	// 清空输入缓冲区
+//	while ((getchar()) != '\n');
+//	if(in_key==admin_key){
+//		
+//		printf("\t\t登陆成功!\n");
+//		printf("\t\t");system("pause");
+//		
+//	}else{
+//		printf("\t\t密码错误,请重新输入!\n");
+//		return;
+//	}
 	while(1)
 	{
 		
@@ -793,7 +749,10 @@ void admin_fun(){
 			
 		case 7 :
 			printf("\t\t您已退出管理员系统\n");
-			return ;//退出系统
+			printf("\t\t");
+			system("pause");
+			system("cls");
+			goto then ;//退出系统
 		default:
 			printf("\t\t输入值无效,请重新输入\n~");
 			system("pause");
@@ -801,22 +760,38 @@ void admin_fun(){
 		}
 		
 	}
+	then:log_in_fun();
 	
-	menu_fun();
 }
 void teacher_fun(){
 	//system("cls");
 	if(course_num==0){
 		printf("\n\n\n\t\t当前课程总数为0,系统还未登记，无法进行操作\n\t\t请管理员先创建课程!\n");
+	
 		return;
 	}else{
-		printf("\t\t请输入您的工号:");
-		int teacher_id;scanf("%d",&teacher_id);
-		teacher_now=search_Teacher_Node(root,teacher_id);
-		if(teacher_now==NULL){
-			printf("\t\t管理员还未添加您的课程!请联系管理员\n");
+		FILE* file =  fopen("D:\\data_struct_design\\stu_info.txt","r");
+		if(file==NULL){
+			printf("无法打开文件!");
 			return;
 		}
+		char buffer[512];
+		fgets(buffer, sizeof(buffer), file); // 忽略标题行
+		 while(fgets(buffer, sizeof(buffer), file)){
+			char teacher_name[20];
+			int teacher_id;
+			char teacher_accunt[20];
+			sscanf(buffer, "%s %s %*s %d %s", teacher_name,teacher_accunt, &teacher_id);
+			if(strcmp(teacher_accunt,id )==0){
+				teacher_now=search_Teacher_Node(root,teacher_id);
+				if(teacher_now==NULL){
+					printf("\t\t管理员还未添加您的课程!请联系管理员\n");
+					printf("\t\t");system("pause");
+					return;
+				}
+			}
+		 
+		 }
 		while(1){
 			system("cls");
 			//system("COLOR fd");
@@ -844,14 +819,17 @@ void teacher_fun(){
 				break;
 			case 6:
 				printf("\t\t您已退出老师系统\n");
-				return ;//退出系统
+				printf("\t\t");
+				system("pause");
+				system("cls");
+				goto then ;//退出系统
 			default:
 				printf("\t\t输入值无效,请重新输入\n~");
 				system("pause");
 				continue;
 			}
 		}
-		menu_fun();
+		then:log_in_fun();
 		
 		
 	}
@@ -860,26 +838,50 @@ void student_fun(){
 	//system("cls");
 	if(course_num==0){
 		printf("\n\n\n\t\t当前课程总数为0,系统还未登记，无法进行操作\n\t\t请管理员先创建课程!\n");
+		printf("\t\t");
+		system("pause");
 		return;
 	}else{
-		printf("\t\t请输入您的学号:");
-		int student_id;scanf("%d",&student_id) ;
-		
-		if(id_status[student_id]==false){
-			printf("\t\t您还未注册,请完善信息之后重新登入\n");
-			printf("\t\t请输入您的姓名:");
-			char student_name[20];scanf("%s",student_name);
-			printf("\t\t请输入您的电话:");char student_tel[20];scanf("%s",student_tel); 
-			appendStudnet(&studentList,createNewStudent(student_id,student_name,student_tel));
-			id_status[student_id]=true;  
-			printf("\t\t注册成功!\n");
+		FILE* file =  fopen("D:\\data_struct_design\\stu_info.txt","r");
+		if(file==NULL){
+			printf("无法打开文件!");
 			return;
-		}else{
-			student_now=FindStudent(studentList,student_id);
 		}
+		char buffer[512];
+		
+		fgets(buffer, sizeof(buffer), file); // 忽略标题行
+		while(fgets(buffer, sizeof(buffer), file)){
+			char student_name[20];
+			int student_id;
+			char student_tel[20];
+			char stu_account[20];
+			//Student* new_student=(Student*)malloc(sizeof(Student));
+			sscanf(buffer, "%s %s %*s %d %s", student_name,stu_account, &student_id,student_tel);
+			if(strcmp(stu_account,id)==0){
+				appendStudnet(&studentList,createNewStudent(student_id,student_name,student_tel));
+				student_now=FindStudent(studentList,student_id);
+			}
+		}
+		
+		// printf("\t\t请输入您的学号:");
+		// int student_id;scanf("%d",&student_id) ;
+		
+		// if(id_status[student_id]==false){
+		// 	printf("\t\t您还未注册,请完善信息之后重新登入\n");
+		// 	printf("\t\t请输入您的姓名:");
+		// 	char student_name[20];scanf("%s",student_name);
+		// 	printf("\t\t请输入您的电话:");char student_tel[20];scanf("%s",student_tel); 
+		// 	appendStudnet(&studentList,createNewStudent(student_id,student_name,student_tel));
+		// 	id_status[student_id]=true;  
+		// 	printf("\t\t注册成功!\n");
+		// 	return;
+		// }else{
+		// 	student_now=FindStudent(studentList,student_id);
+		// }
 		while(1){
 			//	system("cls");
 			//system("COLOR fd");
+			printf("\t\t");
 			system("pause");
 			system("cls");
 			showMenu_student();
@@ -906,14 +908,17 @@ void student_fun(){
 				break;
 			case 6:
 				printf("\t\t您已退出学生系统\n");
-				return ;//退出系统
+				printf("\t\t");
+				system("pause");
+				system("cls");
+				goto then ;//退出系统 
 			default:
 				printf("\t\t输入值无效,请重新输入\n~");
 				system("pause");
 				continue;
 			}
 		}
-		menu_fun();
+		then:log_in_fun();
 	}
 	
 }
@@ -954,9 +959,95 @@ void menu_fun(){
 	}
 	system("pause");
 }
+void log_in(){
+	printf("\t\t    \t 课程管理信息系统  \t    \n");
+	printf("\t\t------------------------------\n\n");
+	printf("\t\t账号: ");
+	strcpy(id, ""); // 清空数组
+	strcpy(key, "");  
+	scanf("%s",id);
+	printf("\t\t密码: "); 
+	scanf("%s",key);
+	FILE *file=fopen("D:\\data_struct_design\\accounts.txt","r");
+	if(file==NULL){
+		printf("\t\t无法打开文件!");
+		return;
+	}
+	char buffer[512];
+	fgets(buffer, sizeof(buffer), file); // 忽略标题行
+	while(fgets(buffer, sizeof(buffer), file)){
+		Account account;
+		sscanf(buffer, "%s %s %s %s %s", account.name, account.account, account.password, account.work_id, account.role);
+		if(strcmp(account.account,id)==0&&strcmp(account.password,key)==0){
+			if(strcmp(account.role,"管理员")==0){
+				printf("\t\t登录成功!\n");
+				printf("\t\t");system("pause");
+				system("cls");
+				admin_fun();
+				fclose(file); // 关闭文件
+				return;
+			}
+			else if(strcmp(account.role,"老师")==0){
+				printf("\t\t登录成功!\n");
+				printf("\t\t");system("pause");
+				system("cls");
+				teacher_fun();
+				fclose(file); // 关闭文件
+				return;
+			}
+			else if(strcmp(account.role,"学生")==0){
+				printf("\t\t登录成功!\n");
+				printf("\t\t");system("pause");
+				//system("cls");
+				student_fun();
+				fclose(file); // 关闭文件
+				return;
+			}
+		}
+	 
+	}
+	printf("\t\t账号或密码不正确!请重试。\n");
+	printf("\t\t");
+	system("pause");
+	
+	return;
+}
+void login_menu(){
+	printf("\t\t    \t 课程管理信息系统  \t    \n");
+	printf("\t\t------------------------------\n\n");
+	printf("\t\t1. 登录\n");
+	printf("\t\t0. 退出\n");
+	printf("\t\t请选择: ");
+}
+void log_in_fun(){
+	
+	while(1){
+		system("cls");	
+		login_menu();
+		int choice;scanf("%d",&choice);
+		switch (choice) {
+		case 1:
+			printf("\t\t");system("pause");
+			system("cls");
+			log_in();
+			break;
+		case 0:
+			printf("\n\t\t\t感谢使用,再见!\n\n");
+			return;
+		default:
+			printf("\n\t\t\t请选择有效的选项!\n\n");
+			printf("\t\t");
+			system("pause");
+			continue;
+		}
+	}
+	printf("\t\t");
+	system("pause");
+}
 
 int main(){
 	setvbuf(stdout, NULL, _IONBF, 0);
-	menu_fun();
+	//menu_fun();
+	log_in_fun();
 	return 0;
 }
