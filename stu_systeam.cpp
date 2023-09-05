@@ -2,8 +2,14 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+#define MAX_ACCOUNT_LEN 20
+#define MAX_PASSWORD_LEN 20
+#define MAX_NAME_LEN 50
+#define MAX_WORKID_LEN 20
+
 const int MAX=110;
 int course_num=0;   //课程数量
+
 bool id_status[MAX]; //学生id是否注册
 const int admin_key=112234;
 typedef struct Student{
@@ -45,7 +51,13 @@ typedef struct Teacher{
 	Teacher* left;
 	Teacher* right;
 }Teacher;
-
+typedef struct {
+	char name[MAX_NAME_LEN];
+	char account[MAX_ACCOUNT_LEN];
+	char password[MAX_PASSWORD_LEN];
+	char work_id[MAX_WORKID_LEN];
+	char role[MAX_NAME_LEN];
+} Account;
 Teacher* root=NULL;
 Student* studentList=NULL;      //学生系统的学生链表
 Student* student_now=NULL;      //正在使用系统的学生
@@ -56,6 +68,49 @@ void PrintStudentList(Student* StudentList);
 Student* FindStudent(Student* StudentList,int student_id);
 void addCourseToStudent(Student* student,Stu_self_course* new_course);
 void deleteCourse(Student* student,int course_id);
+void log_in(){
+	printf("\t\t    \t 课程管理信息系统  \t    \n");
+	printf("\t\t------------------------------\n");
+	printf("\t\t账号: ");
+	char id[MAX_ACCOUNT_LEN];scanf("%s",id);
+	printf("\n\t\t密码: ");	
+	char key[MAX_PASSWORD_LEN];scanf("%s",key);
+	FILE *file=fopen("acountd.txt","r");
+	if(file==NULL){
+		printf("无法打开文件!");
+		return;
+	}
+	char buffer[512];
+	fgets(buffer, sizeof(buffer), file); // 忽略标题行
+	while(fgets(buffer, sizeof(buffer), file)){
+		 Account account;
+		 sscanf(buffer, "%s %s %s %s %s %[^\n]", account.name, account.account, account.password, account.work_id, account.role);
+		 if(strcmp(account.account,id)==0&&strcmp(account.password,key)==0){
+		 	if(strcmp(account.role,"管理员")==0){
+		 		printf("\t\t登录成功!\n");
+		 		printf("\t\t");system("pause");
+		 		admin_fun();
+		 		return;
+			 }
+			 else if(strcmp(account.role,"老师")==0){
+			 	printf("\t\t登录成功!\n");
+			 	printf("\t\t");system("pause");
+			 	teacher_fun();
+			 	return;
+			 }
+			 else if(strcmp(account.role,"学生")==0){
+			 	printf("\t\t登录成功!\n");
+			 	printf("\t\t");system("pause");
+			 	student_fun();
+			 	return;
+			 }
+		 }
+	}
+	fclose(file);
+	printf("账号或密码不正确！请重试。\n");
+
+}
+ 
 void showMenu()
 {
 	printf("\t\t******************************************\n");
