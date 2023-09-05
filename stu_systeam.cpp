@@ -700,23 +700,9 @@ void student_output_all_courses(){
 }
 
 void admin_fun(){
-	
-//	printf("\t\t请输入管理员账户密码\n\t\t");
-//	int in_key;scanf("%d",&in_key);
-//	// 清空输入缓冲区
-//	while ((getchar()) != '\n');
-//	if(in_key==admin_key){
-//		
-//		printf("\t\t登陆成功!\n");
-//		printf("\t\t");system("pause");
-//		
-//	}else{
-//		printf("\t\t密码错误,请重新输入!\n");
-//		return;
-//	}
+
 	while(1)
 	{
-		
 		system("cls");
 		showMenu_Adimn();
 		int select;
