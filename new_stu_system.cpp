@@ -162,9 +162,9 @@ bool delete_node(Teacher *&p){
 			q->right=s->right;
 		}
 		free(s);
-
+		
 	}
-		 
+	
 	return true;
 }
 bool delete_Teacher_Node(Teacher* root,int teacher_id){
@@ -184,7 +184,7 @@ Teacher* show_info_course(Teacher* root){
 	if(root!=NULL){
 		show_info_course(root->left);
 		if(root->status==1){
-			printf("\t课程:%s\t课程号:%d\t学分:%d\t剩余容量:%d\t任课老师:%s\t工号:%d\t时间:%s\t地点:%s\n",root->course_name,root->course_id,root->course_credit,root->course_remain,root->teacher_name,root->teacher_id,root->course_time,root->course_place);
+			printf("\t\t课程:%s\t课程号:%d\t学分:%d\t剩余容量:%d\t任课老师:%s\t工号:%d\t时间:%s\t地点:%s\n",root->course_name,root->course_id,root->course_credit,root->course_remain,root->teacher_name,root->teacher_id,root->course_time,root->course_place);
 		}
 		show_info_course(root->right);
 	}
@@ -266,6 +266,8 @@ Student* search_student_node(Student* studentList,int student_id){
 	return NULL;
 }
 void admin_create_course(){
+	printf("\t\t    \t\t 课程管理信息系统  \t    \n");
+	printf("\t\t-----------------------------------------\n\n");
 	printf("\t\t请输入要创建的课程总数:");
 	int course_num_now;
 	scanf("%d",&course_num_now);
@@ -300,6 +302,8 @@ void admin_create_course(){
 	}
 }
 void admin_add_course(){
+	printf("\t\t    \t\t 课程管理信息系统  \t    \n");
+	printf("\t\t-----------------------------------------\n\n");
 	printf("\t\t请输入要添加的课程信息\n");
 	printf("\n\t\t课程名: ");    char course_name[20];      scanf("%s",course_name);   
 	printf("\t\t课程号: ");    int course_id;             scanf("%d",&course_id);       
@@ -322,6 +326,8 @@ void admin_add_course(){
 	printf("\t\t");system("pause");
 }
 void admin_delete_course(){
+	printf("\t\t    \t\t 课程管理信息系统  \t    \n");
+	printf("\t\t-----------------------------------------\n\n");
 	if(course_num==0){
 		printf("\t\t当前还未开设任何课程!\n");
 		printf("\t\t");system("pause");
@@ -359,22 +365,28 @@ void admin_delete_course(){
 	}
 }
 void admin_count_course(){
+	printf("\t\t    \t\t 课程管理信息系统  \t    \n");
+	printf("\t\t-----------------------------------------\n\n");
 	if(course_num==0){
 		printf("\t\t当前还未开设任何课程!\n");
 		printf("\t\t");system("pause");
 		return;
 	}
 	printf("\t\t当前课程总数为:%d\n",course_num );
+	printf("\t\t已开设课程如下:\n");
+	inorder_Teacher_Node(root);
 	printf("\t\t");system("pause");
 }
 void admin_count_student(){
+	printf("\t\t    \t\t 课程管理信息系统  \t    \n");
+	printf("\t\t-----------------------------------------\n\n");
 	if(course_num==0){
 		printf("\t\t当前还未开设任何课程!\n");
 		printf("\t\t");system("pause");
 		return;
 	}
-	printf("t\t\t\t\t课程列表:\n");
-	printf("\t\t——————————————————————————————————————————————————————————————\n");
+	printf("\t\t课程列表:\n");
+	
 	inorder_Teacher_Node(root);
 	printf("\t\t请输入要查询课程的老师工号: ");
 	int teacher_id;scanf("%d",&teacher_id);
@@ -390,13 +402,15 @@ void admin_count_student(){
 	}
 }
 void admin_output_all_courses(){
+	printf("\t\t    \t\t 课程管理信息系统  \t    \n");
+	printf("\t\t-----------------------------------------\n\n");
 	if(course_num==0){
 		printf("\t\t当前还未开设任何课程!\n");
 		printf("\t\t");system("pause");
 		return;
 	}
-	printf("\t\t\t\t\t课程列表\n");
-	printf("\t\t——————————————————————————————————————————————————————————————\n");
+	printf("\t\t课程列表\n");
+	
 	show_info_course(root);
 	printf("\t\t");system("pause");
 }
@@ -428,12 +442,14 @@ void admin_read_file_course(){
 	}
 }
 void admin_fun(){
-
+	
 	while(1)
 	{
 		system("cls");
 		showMenu_Adimn();
 		int select;
+		//clear_buffer();
+		fflush(stdin);//清空缓冲区
 		scanf("%d",&select);
 		printf("\t\t");system("pause");
 		system("cls");
@@ -506,6 +522,8 @@ void Print_Class_StudentList(class_stu* StudentList){
 	printf("\t\t");system("pause");
 }
 void teacher_course_info(){
+	printf("\t\t    \t\t 课程管理信息系统  \t    \n");
+	printf("\t\t-----------------------------------------\n\n");
 	printf("\t\t您当前开设的课程为:\n");
 	printf("\t\t课程名称:%s\t课程号:%d",teacher_now->course_name,teacher_now->course_id);
 	printf("\t总容量为%d",teacher_now->course_capacity);
@@ -514,6 +532,8 @@ void teacher_course_info(){
 	printf("\t\t");system("pause");
 }
 void teacher_student_in_class(){
+	printf("\t\t    \t\t 课程管理信息系统  \t    \n");
+	printf("\t\t-----------------------------------------\n\n");
 	class_stu* temp=teacher_now->class_stu_list;
 	if(temp==NULL){
 		printf("\t\t当前课程暂无选课学生!\n");
@@ -526,6 +546,8 @@ void teacher_student_in_class(){
 
 //老师输入学生课程成绩(bug应该修复过了)
 void teacher_input_student_course_score(){
+	printf("\t\t    \t\t 课程管理信息系统  \t    \n");
+	printf("\t\t-----------------------------------------\n\n");
 	class_stu* temp=teacher_now->class_stu_list;
 	if(temp==NULL){
 		printf("\t\t当前课程暂无选课学生!\n");
@@ -547,7 +569,7 @@ void teacher_input_student_course_score(){
 		temp=temp->next;
 	}
 	
-
+	
 	
 	printf("\t\t成绩录入成功!\n");
 	printf("\t\t");system("pause");
@@ -562,6 +584,8 @@ void PrintStudentList(class_stu* StudentList){
 	printf("\t\t");system("pause");
 }
 void teacher_change_student_course_score(){
+	printf("\t\t    \t\t 课程管理信息系统  \t    \n");
+	printf("\t\t-----------------------------------------\n\n");
 	class_stu* temp2=teacher_now->class_stu_list;
 	if(temp2==NULL){
 		printf("\t\t当前课程暂无选课学生!\n");
@@ -569,7 +593,7 @@ void teacher_change_student_course_score(){
 	}
 	printf("\t\t您所在班级里的学生为:\n");
 	PrintStudentList(teacher_now->class_stu_list);
-
+	
 	printf("\t\t请输入要修改成绩的学生学号: ");
 	int student_id;scanf("%d",&student_id);
 	class_stu* temp=teacher_now->class_stu_list;
@@ -598,6 +622,8 @@ void teacher_change_student_course_score(){
 	return;
 }
 void teacher_count_student_score(){
+	printf("\t\t    \t\t 课程管理信息系统  \t    \n");
+	printf("\t\t-----------------------------------------\n\n");
 	//+,90,80,60,-
 	class_stu* temp1=teacher_now->class_stu_list;
 	if(temp1==NULL){
@@ -654,7 +680,8 @@ void teacher_fun(){
 			system("cls");
 			showMenu_teacher();
 			int select;
-			scanf("%d",&select);
+			fflush(stdin);
+		scanf("%d",&select);
 			printf("\t\t");system("pause");
 			system("cls");
 			switch(select)
@@ -699,7 +726,6 @@ Student* createNewStudent(int student_id,char student_name[20],char student_tel[
 	new_student->next=NULL;
 	new_student->stu_course=NULL;
 	return new_student;
-	return NULL;
 }
 void deleteCourse(Student* student,int course_id){
 	if(student->stu_course==NULL){
@@ -752,12 +778,12 @@ void addCourseToStudent(Student* student,Stu_self_course* new_course){
 }
 //将学生添加至老师-班级里
 class_stu* createNewClassStudent(int student_id,char student_name[20]){
-	class_stu* new_student=(class_stu*)malloc(sizeof(class_stu));
+	 class_stu* new_student = (class_stu*)calloc(1, sizeof(class_stu));
 	new_student->student_id=student_id;
 	strcpy(new_student->student_name,student_name);
 	new_student->next=NULL;
 	new_student->student_score=0;
-	 
+	
 	return new_student;
 }
 void addStudentToCourse(Teacher* teacher,class_stu* student){
@@ -786,6 +812,8 @@ Stu_self_course* createNewStu_self_course(char student_name[20],char course_name
 	return new_course;
 }
 void student_select_course(){
+	printf("\t\t    \t\t 课程管理信息系统  \t    \n");
+	printf("\t\t-----------------------------------------\n\n");
 	student_course_info();
 	printf("\t\t请输入您要选择的课程对应的老师工号:");
 	int teacher_id;scanf("%d",&teacher_id);
@@ -812,10 +840,12 @@ void student_select_course(){
 	}
 }
 void student_cancel_course(){
+	printf("\t\t    \t\t 课程管理信息系统  \t    \n");
+	printf("\t\t-----------------------------------------\n\n");
 	Stu_self_course* temp1=student_now->stu_course;
 	printf("\t\t您所选的课程为:\n");
 	while(temp1!=NULL){
-		if(temp1->status==false){
+		if(temp1->status==1){
 			printf("\t\t课程:%s\t课程号:%d\t",temp1->course_name, temp1->course_id);
 			printf("老师:%s\n",temp1->course_teacher);
 		}
@@ -850,6 +880,13 @@ void student_cancel_course(){
 	
 }
 void student_query_score(){
+	printf("\t\t    \t\t 课程管理信息系统  \t    \n");
+	printf("\t\t-----------------------------------------\n\n");
+	if(student_now==NULL){
+		printf("\t\t您还未选择任何课程!\n");
+		printf("\t\t");system("pause");
+		return;
+	}
 	Stu_self_course* temp=student_now->stu_course;
 	printf("\t\t您选择的课程有:\n");
 	if(temp==NULL){
@@ -870,25 +907,35 @@ void student_query_score(){
 	//printf("\t\t");system("pause");
 }
 void student_output_all_courses(){
-	Stu_self_course* temp=student_now->stu_course;
-	if(temp==NULL){
+	printf("\t\t    \t\t 课程管理信息系统  \t    \n");
+	printf("\t\t-----------------------------------------\n\n");
+	//要先判断student_now是否为空,否则会出现段错误
+	if (student_now != NULL) {
+    	Stu_self_course* temp = student_now->stu_course;
+    	if(temp==NULL){
 		printf("\t\t还未选择任何课程!\n");
 		return;
-	}
-	printf("\t\t您所选的课程为:\n");
-	while(temp!=NULL){
-		if(temp->status==1){
-			printf("\t\t课程:%s\t",temp->course_name);
-			printf("老师:%s",temp->course_teacher);
-			if(temp->score==0){
-				printf("\t成绩:暂未登记！\n");
-			}else{
-				printf("\t成绩:%d\n",temp->score);
-			}
 		}
-		temp=temp->next;
-	}
+		printf("\t\t您所选的课程为:\n");
+		while(temp!=NULL){
+			if(temp->status==1){
+				printf("\t\t课程:%s\t",temp->course_name);
+				printf("老师:%s",temp->course_teacher);
+				if(temp->score==0){
+					printf("\t成绩:暂未登记！\n");
+				}else{
+					printf("\t成绩:%d\n",temp->score);
+				}
+			}
+			temp=temp->next;
+		}
 	//printf("\t\t");system("pause");
+	} else {//student_now指针为空
+   	  printf("\t\t当前还未选择任何课程!\n");
+      return;
+	}
+	 
+	
 }
 void student_fun(){
 	if(course_num==0){
@@ -921,7 +968,8 @@ void student_fun(){
 			system("cls");
 			showMenu_student();
 			int select;
-			scanf("%d",&select);
+			fflush(stdin);
+		scanf("%d",&select);
 			printf("\t\t");system("pause");
 			system("cls");
 			switch(select)
@@ -1015,8 +1063,8 @@ void student_menu(){
 	printf("\n\t\t**\t 输入序号以选择对应功能 : "); 
 }
 void log_in(){
-	printf("\t\t    \t 课程管理信息系统  \t    \n");
-	printf("\t\t------------------------------\n\n");
+	printf("\t\t    \t\t 课程管理信息系统  \t    \n");
+	printf("\t\t-----------------------------------------\n\n");
 	printf("\t\t账号: ");
 	strcpy(id, ""); // 清空数组
 	strcpy(key, "");  
@@ -1035,6 +1083,7 @@ void log_in(){
 		sscanf(buffer, "%s %s %s %s %s", account.name, account.account, account.password, account.work_id, account.role);
 		if(strcmp(account.account,id)==0&&strcmp(account.password,key)==0){
 			printf("\t\t登录成功!\n");
+			printf("\t\t%s,欢迎使用课程信息管理系统!\n",account.name);
 			printf("\t\t");system("pause");
 			system("cls");
 			if(strcmp(account.role,"管理员")==0){
@@ -1062,7 +1111,7 @@ void log_in(){
 	return;
 }
 void login_menu(){
-	printf("\t\t    \t 课程管理信息系统  \t    \n");
+	printf("\t\t    \t\t 课程管理信息系统  \t    \n");
 	printf("\t\t------------------------------\n\n");
 	printf("\t\t1. 登录\n");
 	printf("\t\t0. 退出\n");
@@ -1096,6 +1145,10 @@ void log_in_fun(){
 int main(){
 	setvbuf(stdout, NULL, _IONBF, 0);
 	//menu_fun();
+	Teacher* root = (Teacher*)calloc(1, sizeof(Teacher));
+	Student* studentList = (Student*)calloc(1, sizeof(Student));
+	Student* student_now = (Student*)calloc(1, sizeof(Student));
+	Teacher* teacher_now = (Teacher*)calloc(1, sizeof(Teacher));
 	admin_read_file_course();//读取文件里的课程信息
 	log_in_fun();
 	return 0;

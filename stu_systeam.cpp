@@ -607,8 +607,6 @@ void student_course_info(){
 	//system("cls");
 	printf("\t\t当前可选课程有:\n");
 	show_course_info(root);
-	//printf("\t\t");system("pause");
-	
 }
 void student_select_course(){
 	//system("cls");
@@ -819,11 +817,9 @@ void teacher_fun(){
 	}
 }
 void student_fun(){
-	//system("cls");
 	if(course_num==0){
 		printf("\n\n\n\t\t当前课程总数为0,系统还未登记，无法进行操作\n\t\t请管理员先创建课程!\n");
-		printf("\t\t");
-		system("pause");
+		printf("\t\t");system("pause");
 		return;
 	}else{
 		FILE* file =  fopen("D:\\data_struct_design\\stu_info.txt","r");
@@ -839,11 +835,9 @@ void student_fun(){
 			int student_id;
 			char student_tel[20];
 			char stu_account[20];
-			//Student* new_student=(Student*)malloc(sizeof(Student));
 			sscanf(buffer, "%s %s %*s %d %s", student_name,stu_account, &student_id,student_tel);
 			if(strcmp(stu_account,id)==0){
 				appendStudnet(&studentList,createNewStudent(student_id,student_name,student_tel));
-				//student_now=FindStudent(studentList,student_id);
 				student_now=createNewStudent(student_id,student_name,student_tel);
 			}
 		}
